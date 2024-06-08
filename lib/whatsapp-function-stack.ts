@@ -10,7 +10,6 @@ export class WhatsappFunctionStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Crear la tabla DynamoDB
     const table = new dynamodb.Table(this, "WhatsAppTable", {
       partitionKey: { name: "id", type: dynamodb.AttributeType.STRING },
       tableName: "t_whatsapp",
@@ -20,7 +19,6 @@ export class WhatsappFunctionStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // Solo para desarrollo
     });
 
-    // Crear el rol IAM para la función Lambda
     const role = new iam.Role(this, "whatsappFunctionRole", {
       assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
       inlinePolicies: {
@@ -51,11 +49,10 @@ export class WhatsappFunctionStack extends cdk.Stack {
       },
     });
 
-    // Crear la función Lambda
     const lambdaFunction = new lambda.Function(this, "WhatsAppFunction", {
-      runtime: lambda.Runtime.NODEJS_18_X, // Asegúrate de usar la misma versión que en tu configuración
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: "src/index.handler",
-      code: lambda.Code.fromAsset(path.join(__dirname, "../dist")), // Ruta a tu código compilado
+      code: lambda.Code.fromAsset(path.join(__dirname, "../dist")),
       memorySize: 128,
       timeout: cdk.Duration.seconds(3),
       environment: {
@@ -65,7 +62,6 @@ export class WhatsappFunctionStack extends cdk.Stack {
       ephemeralStorageSize: cdk.Size.mebibytes(512),
     });
 
-    // Crear la URL de la función Lambda
     const functionUrl = new lambda.FunctionUrl(this, "WhatsAppFunctionUrl", {
       function: lambdaFunction,
       authType: FunctionUrlAuthType.NONE,
@@ -77,14 +73,13 @@ export class WhatsappFunctionStack extends cdk.Stack {
           HttpMethod.POST,
           HttpMethod.PUT,
           HttpMethod.DELETE,
-        ], // Corrección aquí
+        ],
         allowedOrigins: ["*"],
         exposedHeaders: ["Content-Length"],
         maxAge: cdk.Duration.seconds(0),
       },
     });
 
-    // Salidas
     new cdk.CfnOutput(this, "whatsappFunctionArn", {
       description: "ARN de la función Lambda whatsapp",
       value: lambdaFunction.functionArn,
