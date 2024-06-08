@@ -1,0 +1,97 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Resources:
+  WhatsAppTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: t_whatsapp
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  whatsappFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: whatsappFunctionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Scan
+                  - dynamodb:Query
+                  - dynamodb:DescribeTable
+                Resource: arn:aws:dynamodb:*:*:table/t_whatsapp
+
+  whatsappFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: dist/index.handler
+      Runtime: nodejs20.x
+      MemorySize: 128
+      Timeout: 3
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref WhatsAppTable
+      Role: !GetAtt whatsappFunctionRole.Arn
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowCredentials: false
+          AllowHeaders:
+            - "*"
+          AllowMethods:
+            - "*"
+          AllowOrigins:
+            - "*"
+          ExposeHeaders:
+            - "Content-Length"
+          MaxAge: 0
+      SnapStart:
+        ApplyOn: None
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+
+Outputs:
+  whatsappFunctionArn:
+    Description: ARN de la función Lambda whatsapp
+    Value: !GetAtt whatsappFunction.Arn
+  whatsappFunctionRoleArn:
+    Description: Role IAM creado para la función whatsapp
+    Value: !GetAtt whatsappFunctionRole.Arn
+  whatsappFunctionUrl:
+    Description: URL para la función Lambda whatsapp
+    Value: !GetAtt whatsappFunctionUrl.FunctionUrl
+  whatsappTableName:
+    Description: Nombre de la tabla DynamoDB
+    Value: !Ref WhatsAppTable
