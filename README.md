@@ -1,3 +1,21 @@
+# WhatsApp Function Lambda
+
+## Descripción del Proyecto
+
+Este proyecto consiste en una función AWS Lambda escrita en Node.js, diseñada para manejar solicitudes HTTP y almacenar datos en una tabla DynamoDB. La función se despliega utilizando AWS Serverless Application Model (SAM) y está configurada para ser invocada a través de una URL pública sin autenticación.
+
+## Funcionalidad
+
+- **Recepción de Datos HTTP**: La función Lambda está diseñada para recibir solicitudes HTTP con datos a través de una URL pública.
+- **Almacenamiento en DynamoDB**: Los datos recibidos se procesan y se almacenan en una tabla DynamoDB (`t_whatsapp`). La tabla DynamoDB se crea y gestiona automáticamente como parte del despliegue de la aplicación.
+- **Registro de Logs**: La función también está configurada para registrar eventos y errores en CloudWatch Logs para facilitar la monitorización y el debugging.
+
+## Arquitectura
+
+- **Lambda Function**: La lógica principal de la aplicación se encuentra en una función Lambda, que se implementa a través de AWS SAM.
+- **DynamoDB**: Los datos se almacenan en una tabla DynamoDB llamada `t_whatsapp`.
+- **IAM Roles y Políticas**: La función Lambda tiene roles y políticas específicos para permitir el acceso a DynamoDB, CloudWatch y otros servicios necesarios.
+
 # Componentes y sus Relaciones
 
 1. **index.ts**:
