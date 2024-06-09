@@ -28,9 +28,9 @@ export class ItemService {
   public async handleEvent(event: any): Promise<any> {
     try {
       const authToken = this.authService.extractAuthToken(event);
-      if (!authToken) {
+      /*if (!authToken) {
         throw new Error("Falta el encabezado de autorización");
-      }
+      }*/
       const body = this.requestService.extractRequestBody(event);
 
       const initialItem = this.createInitialItem(body);
