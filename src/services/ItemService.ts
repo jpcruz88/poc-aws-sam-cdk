@@ -28,20 +28,22 @@ export class ItemService {
   public async handleEvent(event: any): Promise<any> {
     try {
       const authToken = this.authService.extractAuthToken(event);
+      if (!authToken) {
+        throw new Error("Falta el encabezado de autorización");
+      }
       const body = this.requestService.extractRequestBody(event);
 
       const initialItem = this.createInitialItem(body);
       await this.saveItem(initialItem);
 
-      const response = await this.userService.createUser(authToken || "");
-
+      const response = await this.userService.createUser(authToken);
       const responseItem = this.createResponseItem(response.data);
       await this.saveItem(responseItem);
 
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: "Item stored in database and user created",
+          message: "Ítem almacenado en la base de datos y usuario creado",
           response: response.data,
         }),
       };
@@ -83,8 +85,8 @@ export class ItemService {
       await this.repository.saveItem(item);
     } catch (error) {
       throw new Error(
-        "Error saving item: " +
-          (error instanceof Error ? error.message : "Unknown error")
+        "Error al guardar el ítem: " +
+          (error instanceof Error ? error.message : "Error desconocido")
       );
     }
   }

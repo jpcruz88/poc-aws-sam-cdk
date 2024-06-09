@@ -20,8 +20,8 @@ export class UserService implements IUserService {
       return response;
     } catch (error) {
       throw new Error(
-        "Error creating user: " +
-          (error instanceof Error ? error.message : "Unknown error")
+        "Error al crear el usuario: " +
+          (error instanceof Error ? error.message : "Error desconocido")
       );
     }
   }
