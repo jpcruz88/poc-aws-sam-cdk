@@ -135,12 +135,12 @@ Existen dos formas de realizar el despliegue: con SAM (Serverless Application Mo
    `cdk deploy`
    Despliega la aplicación en AWS utilizando CDK.
 
-## Ejemplo de consumo del API
+## Ejemplo request
 
 ```POST / HTTP/1.1
 Host: sohyvn5gbfz4gmx5cghbxccvei0wnccu.lambda-url.us-east-1.on.aws
 Content-Type: application/json
-Authorization: Bearer EAAIpMeZCg3YQBO5EKah9Ub7ATWyJ7ghIraahD2pnorZC80LtfqW7c5DmXVdSDgKtKqBJXiPFkMlg5PSeUYF0MWWqj9RC7zuDSDYMSxoHBzxvY8o0qzuDEwraZCfq9iVlZAhqVmGszjgKBjfvNt1GKBNiC6FZBdnNB0Bc403kasTtE9VAZCWLNTA2qtcSYXZBRBHHjMuI3ZAj1F5aZAgmpsUnmhPobmEuEWPhu9n0ZD
+Authorization: Bearer EAA...
 Content-Length: 227
 
 {
@@ -155,5 +155,19 @@ Content-Length: 227
       "code": "en_US"
     }
   }
+}
+```
+
+## Ejemplo response
+
+```
+{
+    "message": "Ítem almacenado en la base de datos y usuario creado",
+    "response": {
+        "name": "morpheus",
+        "job": "leader",
+        "id": "107",
+        "createdAt": "2024-06-09T13:47:13.416Z"
+    }
 }
 ```
