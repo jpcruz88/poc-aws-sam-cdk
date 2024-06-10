@@ -134,3 +134,26 @@ Existen dos formas de realizar el despliegue: con SAM (Serverless Application Mo
 3. **Desplegar**:
    `cdk deploy`
    Despliega la aplicación en AWS utilizando CDK.
+
+## Ejemplo de consumo del API
+
+```POST / HTTP/1.1
+Host: sohyvn5gbfz4gmx5cghbxccvei0wnccu.lambda-url.us-east-1.on.aws
+Content-Type: application/json
+Authorization: Bearer EAAIpMeZCg3YQBO5EKah9Ub7ATWyJ7ghIraahD2pnorZC80LtfqW7c5DmXVdSDgKtKqBJXiPFkMlg5PSeUYF0MWWqj9RC7zuDSDYMSxoHBzxvY8o0qzuDEwraZCfq9iVlZAhqVmGszjgKBjfvNt1GKBNiC6FZBdnNB0Bc403kasTtE9VAZCWLNTA2qtcSYXZBRBHHjMuI3ZAj1F5aZAgmpsUnmhPobmEuEWPhu9n0ZD
+Content-Length: 227
+
+{
+  "phone_id": 123457,
+  "whatsapp_id": 6552474,
+  "messaging_product": "whatsapp",
+  "to": "",
+  "type": "template",
+  "template": {
+    "name": "hello_world",
+    "language": {
+      "code": "en_US"
+    }
+  }
+}
+```
